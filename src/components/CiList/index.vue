@@ -13,8 +13,7 @@
           <span>{{item.distance}}</span>
         </div>
         <div class="card">
-          <div>小吃</div>
-          <div>折扣卡</div>
+          <div v-if="num===1" v-for="(num,key) in item.tag" :key="key" :class="key|classCard">{{key|formatCard}}</div>
         </div>
       </li>
       
@@ -38,6 +37,36 @@ export default {
               console.log(res.data.data.cinemas);
           }
       })
+  },
+  filters:{
+    formatCard(key){
+      var card=[
+        {key:'allowRefund',value:'改签'},
+        {key:'endorse',value:'退'},
+        {key:'sell',value:'折扣卡'},
+        {key:'snack',value:'小吃'}
+      ];
+      for(var i=0;i<card.length;i++){
+        if(card[i].key===key){
+          return card[i].value;
+        }
+      }
+      return '';
+    },
+    classCard(key){
+      var card=[
+        {key:'allowRefund',value:'or'},
+        {key:'endorse',value:'or'},
+        {key:'sell',value:'bl'},
+        {key:'snack',value:'bl'}
+      ];
+      for(var i=0;i<card.length;i++){
+        if(card[i].key===key){
+          return card[i].value;
+        }
+      }
+      return '';
+    }
   }
 };
 </script>
