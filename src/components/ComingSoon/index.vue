@@ -1,46 +1,58 @@
 <template>
   <div class="movie_body">
-    <ul>
-      <li v-for="item in comingList" :key="item.id">
-        <div class="pic_show">
-          <img :src="item.img | setWH('128.180')" />
-        </div>
-        <div class="info_list">
-          <h2>{{item.nm}} <img  v-if="item.version" src="@/assets/maxs.png" /></h2>
-          <p>
-            <span class="person">{{item.wish}}</span> 人想看
-          </p>
-          <p>{{item.star}}</p>
-          <p>{{item.showInfo}}</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-    </ul>
+    <Loading v-if="isLoading"></Loading>
+    <scroller v-else>
+      <ul>
+        <li v-for="item in comingList" :key="item.id">
+          <div class="pic_show">
+            <img :src="item.img | setWH('128.180')" />
+          </div>
+          <div class="info_list">
+            <h2>
+              {{item.nm}}
+              <img v-if="item.version" src="@/assets/maxs.png" />
+            </h2>
+            <p>
+              <span class="person">{{item.wish}}</span> 人想看
+            </p>
+            <p>{{item.star}}</p>
+            <p>{{item.showInfo}}</p>
+          </div>
+          <div class="btn_pre">预售</div>
+        </li>
+      </ul>
+    </scroller>
   </div>
 </template>
 <script>
 export default {
   name: "ComingSoon",
-  data(){
-      return{
-          comingList:[]
-      }
+  data() {
+    return {
+      comingList: [],
+      isLoading:true,
+      prevCityId:-1
+    };
   },
-  mounted(){
-      this.axios.get('/api/movieComingList?cityId=10').then((res)=>{
-          var msg=res.data.msg;
-          if(msg==="ok"){
-              this.comingList=res.data.data.comingList;
-              console.log(res.data.data.comingList);
-          }
-      })
+  activated() {
+    var cityId=this.$store.state.city.id;
+   if(this.prevCityId===cityId){return;}
+   this.isLoading=true;
+    this.axios.get("/api/movieComingList?cityId="+cityId).then(res => {
+      var msg = res.data.msg;
+      if (msg === "ok") {
+        this.comingList = res.data.data.comingList;
+        this.isLoading=false;
+        this.prevCityId=cityId;
+      }
+    });
   }
 };
 </script>
 <style scoped>
-#content .movie_body{
-    flex: 1;
-    overflow:auto;
+#content .movie_body {
+  flex: 1;
+  overflow: auto;
 }
 .movie_body ul {
   margin: 0 12px;

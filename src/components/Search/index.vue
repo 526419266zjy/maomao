@@ -48,9 +48,10 @@ export default {
     //函数防抖，使用定时器，Ajax的about方法，axios内置方法
     message(newVal) {
       var that = this;
+      var cityId=this.$store.state.city.id;
       this.cancelRequest();
       this.axios
-        .get("/api/searchList?cityId=10&kw=" + newVal, {
+        .get('/api/searchList?cityId='+cityId+'&kw=' + newVal, {
           cancelToken: new this.axios.CancelToken(function(c) {
             that.source = c;
           })

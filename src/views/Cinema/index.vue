@@ -16,7 +16,9 @@
           <i class="iconfont icon-lower-triangle"></i>
         </div>
       </div>
-      <CiList />
+      <keep-alive>
+        <CiList />
+    </keep-alive>
     </div>
     <TabBar></TabBar>
   </div>
@@ -36,6 +38,14 @@ export default {
 };
 </script>
  <style scoped>
+ #content {
+  flex: 1;
+  overflow: auto;
+  margin-bottom: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
 #content .cinema_menu {
   width: 100%;
   height: 45px;
